@@ -10,7 +10,11 @@ Author(s): Michael Guerzhoy with tests contributed by Siavash Kazemian.  Last mo
 """
 
 def is_empty(board):
-    pass
+    for i in range(len(board)):
+        for n in range(len(board[i])):
+            if board[i][n] != " ":
+                return False
+    return True
     
     
 def is_bounded(board, y_end, x_end, length, d_y, d_x):
@@ -25,8 +29,8 @@ def detect_rows(board, col, length):
     return open_seq_count, semi_open_seq_count
     
 def search_max(board):
-    return move_y, move_x
-    
+    #return move_y, move_x
+    pass
 def score(board):
     MAX_SCORE = 100000
     
@@ -102,7 +106,7 @@ def analysis(board):
         
     
 def play_gomoku(board_size):
-    board = make_empty_board(board_size)
+    '''board = make_empty_board(board_size)
     board_height = len(board)
     board_width = len(board[0])
     
@@ -136,7 +140,8 @@ def play_gomoku(board_size):
         
         game_res = is_win(board)
         if game_res in ["White won", "Black won", "Draw"]:
-            return game_res
+            return game_res'''
+    pass
         
             
             
