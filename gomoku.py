@@ -18,7 +18,16 @@ def is_empty(board):
     
     
 def is_bounded(board, y_end, x_end, length, d_y, d_x):
-    pass
+    end_status = ""
+    start_status = ""
+    
+    if ((y_end + d_y) >= len(board)) or ((x_end + d_x) >= len(board[0])):
+        end_status = "CLOSED"
+    if board[y_end + d_y][x_end + d_x] == " ":
+        end_status = "OPEN"
+    else
+        end_status = "CLOSED"
+    #if  
     
 def detect_row(board, col, y_start, x_start, length, d_y, d_x):
     return open_seq_count, semi_open_seq_count
