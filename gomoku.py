@@ -23,11 +23,25 @@ def is_bounded(board, y_end, x_end, length, d_y, d_x):
     
     if ((y_end + d_y) >= len(board)) or ((x_end + d_x) >= len(board[0])):
         end_status = "CLOSED"
-    if board[y_end + d_y][x_end + d_x] == " ":
+    elif board[y_end + d_y][x_end + d_x] == " ":
         end_status = "OPEN"
     else
         end_status = "CLOSED"
-    #if  
+        
+    if (y_end - (d_y * length) < 0) or (x_end - (d_x * length) < 0):
+        start_status = "CLOSED"
+    elif board[y_end - (d_y * length)][x_end - (d_x * length)] == " ":
+        start_status = "OPEN"
+    else:
+        start_status = "CLOSED"
+    
+    if end_status != start_status:
+        return "SEMIOPEN"
+    elif start_status == "OPEN" and end_status == "OPEN":
+        return "OPEN"
+    else:
+        return "CLOSED"
+    
     
 def detect_row(board, col, y_start, x_start, length, d_y, d_x):
     return open_seq_count, semi_open_seq_count
