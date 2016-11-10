@@ -18,14 +18,17 @@ def is_empty(board):
     
     
 def is_bounded(board, y_end, x_end, length, d_y, d_x):
+    '''Returns "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at [y_end][x_end] on board board. 
+    Board is a nxn matrix. y_end, x_end, length, d_y, d_x are positive integers. (d_y, d_x) is one of: (1, 0), (0,1), or te(1,1)'''
+    
     end_status = ""
     start_status = ""
     
-    if ((y_end + d_y) >= len(board)) or ((x_end + d_x) >= len(board[0])):
+    if ((y_end + d_y) >= len(board)) or ((x_end + d_x) >= len(board)):
         end_status = "CLOSED"
     elif board[y_end + d_y][x_end + d_x] == " ":
         end_status = "OPEN"
-    else
+    else:
         end_status = "CLOSED"
         
     if (y_end - (d_y * length) < 0) or (x_end - (d_x * length) < 0):
