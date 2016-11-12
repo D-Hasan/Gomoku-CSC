@@ -45,9 +45,37 @@ def is_bounded(board, y_end, x_end, length, d_y, d_x):
     else:
         return "CLOSED"
     
+def check_length(board, col, y_start, x_start, d_y, d_x):
+    y = y_start
+    x = x_start
+    length = 1
+    for i in range(len(board)):
+        if y + d_y > len(board) or x + d_x > len(board) or board[y + d_y][x + d_x] != col:
+            return length
+        if board[y + d_y][x + d_x] == col:
+            length += 1
+            y += d_y
+            x += d_x
     
 def detect_row(board, col, y_start, x_start, length, d_y, d_x):
-    return open_seq_count, semi_open_seq_count
+    open_seq_count = 0
+    semi_open_seq_count = 0
+    cur_length = 0
+    for i in range(len(board)):
+        if y + d_y > len(board) or x + d_x > len(board):
+             return open_seq_count, semi_open_seq_count
+        if board[y_start][x_start] == col:
+            if length == check_length(board, col, y_start, x_start, d_y, d_x):
+                status = is_bounded(board, y_start + length * d_y - 1, x_start + length * d_x - 1, length, d_y, d_x)
+                if status == "OPEN":
+                    open_seq_count += 1
+                if status == "SEMIOPEN":
+                    semi_open_seq_count += 1
+                y_start += length * d_y
+                x_start += length * d_x
+        else:
+            y_start += length * d_y
+            x_start += length * d_x
     
 def detect_rows(board, col, length):
     ####CHANGE ME
