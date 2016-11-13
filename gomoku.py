@@ -61,7 +61,7 @@ def check_length(board, col, y_start, x_start, d_y, d_x):
         return 0
         
     for i in range(len(board)):
-        if y + d_y > len(board) or x + d_x > len(board) or board[y + d_y][x + d_x] != col:
+        if (max(y + d_y, x + d_x) >= len(board)) or (min(y + d_y, x + d_x) < 0 ) or board[y + d_y][x + d_x] != col:
             return length
         length += 1
         y += d_y
@@ -434,10 +434,11 @@ def some_tests():
             
 if __name__ == '__main__':
     #play_gomoku(8)
-    board = make_empty_board(8)
+    '''board = make_empty_board(8)
     print_board(board)
-    put_seq_on_board(board, 2, 2, 1, 0, 4, 'b')
-    board[1][2] = 'w'
+    put_seq_on_board(board, 6, 1, -1, 1, 4, 'b')
+    put_seq_on_board(board, 1, 3, 1, 1, 4, 'w')
     print_board(board)
-    print(detect_rows(board, 'b', 4))
+    print(detect_rows(board, 'w', 4))'''
+    pass
     
