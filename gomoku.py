@@ -546,7 +546,18 @@ def some_tests():
   
             
 if __name__ == '__main__':
+    
+        #Test 1: easy_testset_for_main_functions()
+    print("Test 1")
+    easy_testset_for_main_functions()
+    
+        #Test 2: some_test()
+    print("===============================================", "\nTest 2")
     board = make_empty_board(8)
+    some_tests()
+    
+    
+    #board = make_empty_board(8)
     # print_board(board)
     # put_seq_on_board(board, 0, 0, 1, 0, 8, 'b')
     # put_seq_on_board(board, 0, 1, 1, 0, 8, 'b')
@@ -558,10 +569,10 @@ if __name__ == '__main__':
     # put_seq_on_board(board, 0, 7, 1, 0, 8, 'w')
     # board[3][3] = 'b'
     # board[2][5] = 'w'
-    print_board(board)
+    #print_board(board)
     #analysis(board)
-    print(is_win(board))
+    #print(is_win(board))
     #easy_testset_for_main_functions()
-    print(play_gomoku(8))
+    #print(play_gomoku(8))
     
     
