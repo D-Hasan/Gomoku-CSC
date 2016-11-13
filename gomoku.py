@@ -1,15 +1,14 @@
 """Gomoku starter code
-You should complete every incomplete function,
-and add more functions and variables as needed.
 
-Note that incomplete functions have 'pass' as the first statement:
-pass is a Python keyword; it is a statement that does nothing.
-This is a placeholder that you should remove once you modify the function.
-
-Author(s): Michael Guerzhoy with tests contributed by Siavash Kazemian.  Last modified: Oct. 20, 2016
+Author(s): Michael Guerzhoy, Dylan Vogel, and Danial Hasan, with tests contributed by Siavash Kazemian.  
+           Last modified: Nov. 13, 2016
 """
 
+import random
+
 def is_empty(board):
+    ''' Return True if board board is empty, False otherwise.
+        Board is an nxn matrix stored as a list of lists.'''
     for i in range(len(board)):
         for n in range(len(board[i])):
             if board[i][n] != " ":
@@ -19,7 +18,7 @@ def is_empty(board):
 
 def is_bounded(board, y_end, x_end, length, d_y, d_x):
     ''' Return "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at [y_end][x_end] on board board. 
-        Board is a nxn matrix; y_end, x_end, and length are positive ints and length is greater than one.
+        Board is a nxn matrix stored as a list of lists; y_end, x_end, and length are positive ints and length is greater than one.
         (d_y, d_x) is one of: (1, 0), (0, 1), or (1, ±1)'''
     
     end_status = ""
@@ -45,6 +44,7 @@ def is_bounded(board, y_end, x_end, length, d_y, d_x):
     else:
         start_status = "CLOSED"
     
+    #analyze the status of the sequence
     if end_status != start_status:
         return "SEMIOPEN"
     elif start_status == "OPEN" and end_status == "OPEN":
@@ -84,7 +84,7 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
                 if status == "SEMIOPEN":
                     semi_open_seq_count += 1
                 
-                y_start += (length - 1) * d_y   # I think this is what you meant.
+                y_start += (length - 1) * d_y
                 x_start += (length - 1) * d_x
             else:
                 
@@ -98,25 +98,25 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
 def detect_rows(board, col, length):
     ''' Return a tuple of the number of open and semi-open sequences of colour col and length length
         on board board.
-        Assume board is a nxn matrix, col is one of 'b' or 'w', and length is a positive int greater than one.
+        Board is a nxn matrix stored as a list of lists, col is one of 'b' or 'w', and length is a positive int greater than one.
         '''
     
     open_seq_count, semi_open_seq_count = 0, 0
     
-    #checking rows
+    #check rows
     for row in range(len(board)):
         count_tuple = detect_row(board, col, row, 0, length, 0, 1)
         open_seq_count += count_tuple[0]
         semi_open_seq_count += count_tuple[1]
     
-    #checking columns
+    #check columns
     for column in range(len(board)):
         count_tuple = detect_row(board, col, 0, column, length, 1, 0)
         open_seq_count += count_tuple[0]
         semi_open_seq_count += count_tuple[1]
         
-    #checking diagonals
-    for diagonal in range(len(board) - 1):      # the "- 1" keeps us from double counting the corner diagonals
+    #check diagonals
+    for diagonal in range(len(board) - 1):      # the "- 1" prevents it from double counting the corner diagonals
         #top row
         for dir in (1, -1):
             count_tuple = detect_row(board, col, 0, diagonal, length, 1, dir)
@@ -130,8 +130,38 @@ def detect_rows(board, col, length):
     return open_seq_count, semi_open_seq_count
     
 def search_max(board):
-    #return move_y, move_x
+    ''' Return coordinates row, column, of the best move 'b' could make given the current board board
+        Board is an nxn matrix stored as a list of lists. '''
+    
+    CUR_SCORE = score(board)
+    best_move = (-1, -1)
+    
+    #create a deep copy of board board
+    test_board = []
+    for sublist in board:
+        test_board.append(sublist[:])
+    
+    #check for the highest scoring black 'b' move
+    for row in range(len(test_board)):
+        for column in range(len(test_board)):
+            if test_board[row][column] != ' ':
+                continue
+            test_board[row][column] = 'b'
+            new_score = score(test_board)
+            if new_score > CUR_SCORE:
+                CUR_SCORE = new_score
+                best_move = row, column
+            test_board[row][column] = ' '
+    
+    if best_move != (-1, -1):
+        return best_move
+    else:           #if there is no best move, move to the first empty square
+        for row in range(len(test_board)):
+            for column in range(len(test_board)):
+                if test_board[row][column] == ' ':
+                    return row, column
     pass
+    
 def score(board):
     MAX_SCORE = 100000
     
@@ -434,11 +464,6 @@ def some_tests():
             
 if __name__ == '__main__':
     #play_gomoku(8)
-    '''board = make_empty_board(8)
-    print_board(board)
-    put_seq_on_board(board, 6, 1, -1, 1, 4, 'b')
-    put_seq_on_board(board, 1, 3, 1, 1, 4, 'w')
-    print_board(board)
-    print(detect_rows(board, 'w', 4))'''
     pass
+    
     
