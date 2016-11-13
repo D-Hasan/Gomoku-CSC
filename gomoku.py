@@ -16,7 +16,7 @@ def is_empty(board):
                 return False
     return True
     
-    
+
 def is_bounded(board, y_end, x_end, length, d_y, d_x):
     ''' Return "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at [y_end][x_end] on board board. 
         Board is a nxn matrix; y_end, x_end, and length are positive ints and length is greater than one.
@@ -25,14 +25,20 @@ def is_bounded(board, y_end, x_end, length, d_y, d_x):
     end_status = ""
     start_status = ""
     
-    if ((y_end + d_y) >= len(board)) or ((x_end + d_x) >= len(board)):
+    #check that y_end & x_end are valid coordinates
+    if (max(y_end, x_end) >= len(board)) or (min(y_end, x_end) < 0):
+        return "CLOSED"
+    
+    #check the end adjecant to y_end, x_end
+    if (min(y_end + d_y, x_end + d_x) < 0) or (max(y_end + d_y, x_end + d_x) >= len(board)):
         end_status = "CLOSED"
     elif board[y_end + d_y][x_end + d_x] == " ":
         end_status = "OPEN"
     else:
         end_status = "CLOSED"
-        
-    if (y_end - (d_y * length) < 0) or (x_end - (d_x * length) < 0):
+    
+    #check the end opposite of y_end, x_end
+    if (min(y_end - (d_y * length), x_end - (d_x * length)) < 0) or (max(y_end - (d_y * length), x_end - (d_x * length)) > len(board)):
         start_status = "CLOSED"
     elif board[y_end - (d_y * length)][x_end - (d_x * length)] == " ":
         start_status = "OPEN"
@@ -50,33 +56,44 @@ def check_length(board, col, y_start, x_start, d_y, d_x):
     y = y_start
     x = x_start
     length = 1
+    
+    if board[y_start][x_start] != col:
+        return 0
+        
     for i in range(len(board)):
         if y + d_y > len(board) or x + d_x > len(board) or board[y + d_y][x + d_x] != col:
             return length
-        if board[y + d_y][x + d_x] == col:
-            length += 1
-            y += d_y
-            x += d_x
+        length += 1
+        y += d_y
+        x += d_x
     
 def detect_row(board, col, y_start, x_start, length, d_y, d_x):
     open_seq_count = 0
     semi_open_seq_count = 0
     cur_length = 0
-    for i in range(len(board)):
-        if y + d_y > len(board) or x + d_x > len(board) or y + d_y < 0 or x + d_x < 0:
-             return open_seq_count, semi_open_seq_count
-        if board[y_start][x_start] == col:
-            if length == check_length(board, col, y_start, x_start, d_y, d_x):
-                status = is_bounded(board, y_start + length * d_y - 1, x_start + length * d_x - 1, length, d_y, d_x)
+    
+    for i in range(len(board) + 1):
+        if y_start + d_y > len(board) or x_start + d_x > len(board) or y_start + d_y < 0 or x_start + d_x < 0:
+            return open_seq_count, semi_open_seq_count
+        elif board[y_start][x_start] == col:
+            cur_length = check_length(board, col, y_start, x_start, d_y, d_x)
+            if length == cur_length:
+                status = is_bounded(board, y_start + ((length - 1) * d_y), x_start + ((length - 1) * d_x), length, d_y, d_x)
                 if status == "OPEN":
                     open_seq_count += 1
                 if status == "SEMIOPEN":
                     semi_open_seq_count += 1
-                y_start += length * d_y
-                x_start += length * d_x
-        else:
-            y_start += length * d_y
-            x_start += length * d_x
+                
+                y_start += (length - 1) * d_y   # I think this is what you meant.
+                x_start += (length - 1) * d_x
+            else:
+                
+                y_start += (cur_length - 1) * d_y
+                x_start += (cur_length - 1) * d_x
+        
+        y_start += d_y
+        x_start += d_x
+        
     
 def detect_rows(board, col, length):
     ''' Return a tuple of the number of open and semi-open sequences of colour col and length length
@@ -190,7 +207,7 @@ def analysis(board):
         
     
 def play_gomoku(board_size):
-    '''board = make_empty_board(board_size)
+    board = make_empty_board(board_size)
     board_height = len(board)
     board_width = len(board[0])
     
@@ -224,8 +241,8 @@ def play_gomoku(board_size):
         
         game_res = is_win(board)
         if game_res in ["White won", "Black won", "Draw"]:
-            return game_res'''
-    pass
+            return game_res
+    
         
             
             
@@ -416,5 +433,11 @@ def some_tests():
   
             
 if __name__ == '__main__':
-    play_gomoku(8)
+    #play_gomoku(8)
+    board = make_empty_board(8)
+    print_board(board)
+    put_seq_on_board(board, 2, 2, 1, 0, 4, 'b')
+    board[1][2] = 'w'
+    print_board(board)
+    print(detect_rows(board, 'b', 4))
     
