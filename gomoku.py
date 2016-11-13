@@ -37,7 +37,7 @@ def is_bounded(board, y_end, x_end, length, d_y, d_x):
         end_status = "CLOSED"
     
     #check the end opposite of y_end, x_end
-    if (min(y_end - (d_y * length), x_end - (d_x * length)) < 0) or (max(y_end - (d_y * length), x_end - (d_x * length)) > len(board)):
+    if (min(y_end - (d_y * length), x_end - (d_x * length)) < 0) or (max(y_end - (d_y * length), x_end - (d_x * length)) >= len(board)):
         start_status = "CLOSED"
     elif board[y_end - (d_y * length)][x_end - (d_x * length)] == " ":
         start_status = "OPEN"
@@ -463,7 +463,7 @@ def some_tests():
   
             
 if __name__ == '__main__':
-    #play_gomoku(8)
-    pass
+    
+    play_gomoku(8)
     
     
