@@ -99,10 +99,17 @@ def detect_rows(board, col, length):
         semi_open_seq_count += count_tuple[1]
         
     #checking diagonals
-    
-    
-    
-    
+    for diagonal in range(len(board) - 1):      # the "- 1" keeps us from double counting the corner diagonals
+        #top row
+        for dir in (1, -1):
+            count_tuple = detect_row(board, col, 0, diagonal, length, 1, dir)
+            open_seq_count += count_tuple[0]
+            semi_open_seq_count += count_tuple[1]
+        #bottom row
+            count_tuple = detect_row(board, col, len(board) - 1, diagonal, length, -1, dir)
+            open_seq_count += count_tuple[0]
+            semi_open_seq_count += count_tuple[1]
+
     return open_seq_count, semi_open_seq_count
     
 def search_max(board):
