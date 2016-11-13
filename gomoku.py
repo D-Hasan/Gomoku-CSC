@@ -18,8 +18,9 @@ def is_empty(board):
     
     
 def is_bounded(board, y_end, x_end, length, d_y, d_x):
-    '''Returns "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at [y_end][x_end] on board board. 
-    Board is a nxn matrix. y_end, x_end, length, d_y, d_x are positive integers. (d_y, d_x) is one of: (1, 0), (0,1), or te(1,1)'''
+    ''' Return "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at [y_end][x_end] on board board. 
+        Board is a nxn matrix; y_end, x_end, and length are positive ints and length is greater than one.
+        (d_y, d_x) is one of: (1, 0), (0, 1), or (1, ±1)'''
     
     end_status = ""
     start_status = ""
@@ -62,7 +63,7 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
     semi_open_seq_count = 0
     cur_length = 0
     for i in range(len(board)):
-        if y + d_y > len(board) or x + d_x > len(board):
+        if y + d_y > len(board) or x + d_x > len(board) or y + d_y < 0 or x + d_x < 0:
              return open_seq_count, semi_open_seq_count
         if board[y_start][x_start] == col:
             if length == check_length(board, col, y_start, x_start, d_y, d_x):
@@ -78,8 +79,30 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
             x_start += length * d_x
     
 def detect_rows(board, col, length):
-    ####CHANGE ME
+    ''' Return a tuple of the number of open and semi-open sequences of colour col and length length
+        on board board.
+        Assume board is a nxn matrix, col is one of 'b' or 'w', and length is a positive int greater than one.
+        '''
+    
     open_seq_count, semi_open_seq_count = 0, 0
+    
+    #checking rows
+    for row in range(len(board)):
+        count_tuple = detect_row(board, col, row, 0, length, 0, 1)
+        open_seq_count += count_tuple[0]
+        semi_open_seq_count += count_tuple[1]
+    
+    #checking columns
+    for column in range(len(board)):
+        count_tuple = detect_row(board, col, 0, column, length, 1, 0)
+        open_seq_count += count_tuple[0]
+        semi_open_seq_count += count_tuple[1]
+        
+    #checking diagonals
+    
+    
+    
+    
     return open_seq_count, semi_open_seq_count
     
 def search_max(board):
