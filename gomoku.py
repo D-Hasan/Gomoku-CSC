@@ -7,13 +7,13 @@ Author(s): Michael Guerzhoy, Dylan Vogel, and Danial Hasan, with tests contribut
 import random
 
 def is_empty(board):
-<<<<<<< HEAD
+
     ''' Return True or False depending on if the board is clear or not.
         Board is an nxn matrix'''
-=======
+
     ''' Return True if board board is empty, False otherwise.
         Board is an nxn matrix stored as a list of lists.'''
->>>>>>> refs/remotes/origin/master
+
     for i in range(len(board)):
         for n in range(len(board[i])):
             if board[i][n] != " ":
@@ -31,14 +31,14 @@ def is_full(board):
     
     
 def is_bounded(board, y_end, x_end, length, d_y, d_x):
-<<<<<<< HEAD
+
     ''' Return "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at 
         [y_end][x_end] on board board. 
         Board is a nxn matrix; y_end, x_end, and length are positive ints and length is greater than one.
-=======
+    '''
     ''' Return "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at [y_end][x_end] on board board. 
-        Board is a nxn matrix stored as a list of lists; y_end, x_end, and length are positive ints and length is greater than one.
->>>>>>> refs/remotes/origin/master
+        Board is a nxn matrix stored as a list of lists; y_end, x_end, and length are positive ints and length 
+        is greater than one.
         (d_y, d_x) is one of: (1, 0), (0, 1), or (1, ±1)'''
     
     end_status = ""
@@ -119,16 +119,36 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
         y_start += d_y
         x_start += d_x
         
+
+def detect_row_win(board, col, y_start, x_start, length, d_y, d_x):
+    ''' Return True or False depending on if sequences of colour col and length 5 in the row starting at    
+        y_start, x_start and proceeding in the direction d_y, d_x.
+        Assume board is a nxn matrix, col is one of 'b' or 'w', length is 5, and (d_y, d_x) is one of: (1, 0), 
+        (0, 1), or (1, ±1).
+        '''
+    cur_length = 0
+    found = False
     
+    for i in range(len(board) + 1):
+        if y_start + d_y > len(board) or x_start + d_x > len(board) or y_start + d_y < 0 or x_start + d_x < 0:
+            return found
+        elif board[y_start][x_start] == col:
+            cur_length = check_length(board, col, y_start, x_start, d_y, d_x)
+            if length == cur_length:
+                found = True
+            else:
+                y_start += (cur_length - 1) * d_y
+                x_start += (cur_length - 1) * d_x
+        y_start += d_y
+        x_start += d_x
+
 def detect_rows(board, col, length):
     ''' Return a tuple of the number of open and semi-open sequences of colour col and length length
         on board board.
-<<<<<<< HEAD
         Assume board is a nxn matrix, col is one of 'b' or 'w', and length is a positive int greater than one               
         and lower than 6.
-=======
-        Board is a nxn matrix stored as a list of lists, col is one of 'b' or 'w', and length is a positive int greater than one.
->>>>>>> refs/remotes/origin/master
+        Board is a nxn matrix stored as a list of lists, col is one of 'b' or 'w', and length is a positive int         
+        greater than one.
         '''
     
     open_seq_count, semi_open_seq_count = 0, 0
@@ -158,7 +178,35 @@ def detect_rows(board, col, length):
             semi_open_seq_count += count_tuple[1]
 
     return open_seq_count, semi_open_seq_count
+
+
+def detect_rows_win(board, col):
+    ''' Return True or False if a sequence of colour col and length 5 exists on board board.
+        Assume board is an nxn matrix, col is one of 'b' or 'w', and length is 5.
+        '''
+    length = 5
+    #check rows
+    for row in range(len(board)):
+        if detect_row_win(board, col, row, 0, length, 0, 1):
+            return True
     
+    #check columns
+    for column in range(len(board)):
+        if detect_row_win(board, col, 0, column, length, 1, 0):
+            return True
+        
+    #check diagonals
+    for diagonal in range(len(board) - 1):      # the "- 1" prevents it from double counting the corner diagonals
+        #top row
+        for dir in (1, -1):
+            if detect_row_win(board, col, 0, diagonal, length, 1, dir):
+                return True
+        #bottom row
+            if detect_row_win(board, col, len(board) - 1, diagonal, length, -1, dir):
+                return True
+    return False
+    
+
 def search_max(board):
     ''' Return coordinates row, column, of the best move 'b' could make given the current board board
         Board is an nxn matrix stored as a list of lists. '''
@@ -224,7 +272,14 @@ def score(board):
 def is_win(board):
     ''' Return one of "White won", "Black won", "Draw", or "Continue Playing" depending on current board status.
         Assume board is an nxn matrix.'''
-    
+    if detect_rows_win(board, 'b'):
+        return 'Black won'
+    elif detect_rows_win(board, 'w'):
+        return 'White won'
+    elif is_full(board):
+        return 'Draw'
+    else:
+        return 'Continue Playing'
 
 
 def print_board(board):
@@ -289,10 +344,6 @@ def play_gomoku(board_size):
         game_res = is_win(board)
         if game_res in ["White won", "Black won", "Draw"]:
             return game_res
-            
-            
-        
-        
         
         print("Your move:")
         move_y = int(input("y coord: "))
@@ -374,7 +425,7 @@ def easy_testset_for_main_functions():
     test_is_bounded()
     test_detect_row()
     test_detect_rows()
-    #test_search_max()
+    test_search_max()
 
 def some_tests():
     board = make_empty_board(8)
@@ -495,20 +546,22 @@ def some_tests():
   
             
 if __name__ == '__main__':
-<<<<<<< HEAD
-    #play_gomoku(8)
-    # board = make_empty_board(8)
+    board = make_empty_board(8)
     # print_board(board)
-    # put_seq_on_board(board, 6, 1, -1, 1, 4, 'b')
-    # put_seq_on_board(board, 1, 3, 1, 1, 4, 'w')
+    # put_seq_on_board(board, 0, 0, 1, 0, 8, 'b')
+    # put_seq_on_board(board, 0, 1, 1, 0, 8, 'b')
+    # put_seq_on_board(board, 0, 2, 1, 0, 8, 'b')
+    # put_seq_on_board(board, 0, 3, 1, 0, 8, 'b')
+    # put_seq_on_board(board, 0, 4, 1, 0, 8, ' ')
+    # put_seq_on_board(board, 0, 5, 1, 0, 8, 'w')
+    # put_seq_on_board(board, 0, 6, 1, 0, 8, 'w')
+    # put_seq_on_board(board, 0, 7, 1, 0, 8, 'w')
     # board[3][3] = 'b'
     # board[2][5] = 'w'
-    # print_board(board)
-    # analysis(board)
-    easy_testset_for_main_functions()
-=======
-    
-    play_gomoku(8)
->>>>>>> refs/remotes/origin/master
+    print_board(board)
+    #analysis(board)
+    print(is_win(board))
+    #easy_testset_for_main_functions()
+    print(play_gomoku(8))
     
     
