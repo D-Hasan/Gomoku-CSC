@@ -7,18 +7,38 @@ Author(s): Michael Guerzhoy, Dylan Vogel, and Danial Hasan, with tests contribut
 import random
 
 def is_empty(board):
+<<<<<<< HEAD
+    ''' Return True or False depending on if the board is clear or not.
+        Board is an nxn matrix'''
+=======
     ''' Return True if board board is empty, False otherwise.
         Board is an nxn matrix stored as a list of lists.'''
+>>>>>>> refs/remotes/origin/master
     for i in range(len(board)):
         for n in range(len(board[i])):
             if board[i][n] != " ":
                 return False
     return True
     
-
+def is_full(board):
+    ''' Return True or False depending on if board is full of pieces or not.
+        Assume board is an nxn matrix.'''
+    for i in range(len(board)):
+        for n in range(len(board[i])):
+            if board[i][n] == " ":
+                return False
+    return True
+    
+    
 def is_bounded(board, y_end, x_end, length, d_y, d_x):
+<<<<<<< HEAD
+    ''' Return "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at 
+        [y_end][x_end] on board board. 
+        Board is a nxn matrix; y_end, x_end, and length are positive ints and length is greater than one.
+=======
     ''' Return "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at [y_end][x_end] on board board. 
         Board is a nxn matrix stored as a list of lists; y_end, x_end, and length are positive ints and length is greater than one.
+>>>>>>> refs/remotes/origin/master
         (d_y, d_x) is one of: (1, 0), (0, 1), or (1, ±1)'''
     
     end_status = ""
@@ -68,6 +88,11 @@ def check_length(board, col, y_start, x_start, d_y, d_x):
         x += d_x
     
 def detect_row(board, col, y_start, x_start, length, d_y, d_x):
+    ''' Return a tuple of the number of open and semi-open sequences of colour col and length length
+        in the row starting at y_start, x_start and proceeding in the direction d_y, d_x.
+        Assume board is a nxn matrix, col is one of 'b' or 'w', length is a positive int greater than one, and
+        (d_y, d_x) is one of: (1, 0), (0, 1), or (1, ±1).
+        '''
     open_seq_count = 0
     semi_open_seq_count = 0
     cur_length = 0
@@ -98,7 +123,12 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
 def detect_rows(board, col, length):
     ''' Return a tuple of the number of open and semi-open sequences of colour col and length length
         on board board.
+<<<<<<< HEAD
+        Assume board is a nxn matrix, col is one of 'b' or 'w', and length is a positive int greater than one               
+        and lower than 6.
+=======
         Board is a nxn matrix stored as a list of lists, col is one of 'b' or 'w', and length is a positive int greater than one.
+>>>>>>> refs/remotes/origin/master
         '''
     
     open_seq_count, semi_open_seq_count = 0, 0
@@ -192,7 +222,9 @@ def score(board):
 
     
 def is_win(board):
-    pass
+    ''' Return one of "White won", "Black won", "Draw", or "Continue Playing" depending on current board status.
+        Assume board is an nxn matrix.'''
+    
 
 
 def print_board(board):
@@ -342,7 +374,7 @@ def easy_testset_for_main_functions():
     test_is_bounded()
     test_detect_row()
     test_detect_rows()
-    test_search_max()
+    #test_search_max()
 
 def some_tests():
     board = make_empty_board(8)
@@ -463,7 +495,20 @@ def some_tests():
   
             
 if __name__ == '__main__':
+<<<<<<< HEAD
+    #play_gomoku(8)
+    # board = make_empty_board(8)
+    # print_board(board)
+    # put_seq_on_board(board, 6, 1, -1, 1, 4, 'b')
+    # put_seq_on_board(board, 1, 3, 1, 1, 4, 'w')
+    # board[3][3] = 'b'
+    # board[2][5] = 'w'
+    # print_board(board)
+    # analysis(board)
+    easy_testset_for_main_functions()
+=======
     
     play_gomoku(8)
+>>>>>>> refs/remotes/origin/master
     
     
