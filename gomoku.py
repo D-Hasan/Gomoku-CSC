@@ -4,8 +4,6 @@ Author(s): Michael Guerzhoy, Dylan Vogel, and Danial Hasan, with tests contribut
            Last modified: Nov. 13, 2016
 """
 
-import random
-
 def is_empty(board):
     ''' Return True if board board is empty, False otherwise.
         Board is an nxn matrix stored as a list of lists.'''
@@ -19,16 +17,16 @@ def is_empty(board):
 def is_full(board):
     ''' Return True or False depending on if board is full of pieces or not.
         Assume board is an nxn matrix.'''
+        
     for i in range(len(board)):
         for n in range(len(board[i])):
             if board[i][n] == " ":
                 return False
     return True
     
-    
 def is_bounded(board, y_end, x_end, length, d_y, d_x):
-
-    ''' Return "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at [y_end][x_end] on board board. 
+    ''' Return "OPEN", "SEMIOPEN", or "CLOSED" depending on the status of sequence length length ending at      
+        [y_end][x_end] on board board. 
         Board is a nxn matrix stored as a list of lists; y_end, x_end, and length are positive ints and length 
         is greater than one.
         (d_y, d_x) is one of: (1, 0), (0, 1), or (1, ±1)'''
@@ -65,8 +63,11 @@ def is_bounded(board, y_end, x_end, length, d_y, d_x):
         return "CLOSED"
     
 def check_length(board, col, y_start, x_start, d_y, d_x):
-    ''' Returns an integer length which is the length of sequence of color col, starting at (y_start, x_start) and proceeding in the (d_y, d_x) direction 
-        Assume board is a nxn matrix, col is one of 'b' or 'w', (y_start, x_start) are coordinates on the board, and (d_y, d_x) is one of: (1, 0), (0, 1), or (1, ±1).'''
+    ''' Returns an integer length which is the length of sequence of color col, starting at (y_start, x_start) 
+        and proceeding in the (d_y, d_x) direction 
+        Assume board is a nxn matrix, col is one of 'b' or 'w', (y_start, x_start) are coordinates on the 
+        board, and (d_y, d_x) is one of: (1, 0), (0, 1), or (1, ±1).'''
+        
     y = y_start
     x = x_start
     length = 1
@@ -137,10 +138,8 @@ def detect_row_win(board, col, y_start, x_start, length, d_y, d_x):
         x_start += d_x
 
 def detect_rows(board, col, length):
-    ''' Return a tuple of the number of open and semi-open sequences of colour col and length length
-        on board board.
-        Assume board is a nxn matrix, col is one of 'b' or 'w', and length is a positive int greater than one               
-        and lower than 6.
+    ''' Return a tuple of the number of open and semi-open sequences of colour col and length length on board board.
+        Assume board is a nxn matrix, col is one of 'b' or 'w', and length is a positive int greater than one and less than 6.
         Board is a nxn matrix stored as a list of lists, col is one of 'b' or 'w', and length is a positive int         
         greater than one.
         '''
@@ -202,7 +201,7 @@ def detect_rows_win(board, col):
     
 
 def search_max(board):
-    ''' Return coordinates row, column, of the best move 'b' could make given the current board board
+    ''' Return coordinates row, column, of the best move black could make given the current board board
         Board is an nxn matrix stored as a list of lists. '''
     
     CUR_SCORE = score(board)
@@ -266,6 +265,7 @@ def score(board):
 def is_win(board):
     ''' Return one of "White won", "Black won", "Draw", or "Continue playing" depending on current board status.
         Assume board is an nxn matrix.'''
+    
     if detect_rows_win(board, 'b'):
         return 'Black won'
     elif detect_rows_win(board, 'w'):
@@ -639,7 +639,7 @@ if __name__ == '__main__':
     board = make_empty_board(8)
     put_seq_on_board(board, 2, 3, 0, 1, 4, 'b')
     put_seq_on_board(board, 0, 6, 1, 0, 4, 'b')
-    if detect_rows(board, 'b', 4) == (1, 1):
+    if detect_rows(board, 'b', 4) == (1, 1): 
         print("c)Test Passed")
     
         #Testing one row-open but of wrong length
